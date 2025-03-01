@@ -17,6 +17,7 @@ services:
     # mem_limit: 1000mb
 
   traveljournal:
+    container_name: traveljournal-container
     image: ${DOCKER_REGISTRY-}traveljournal
     build:
       context: .
