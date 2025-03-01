@@ -1,0 +1,41 @@
+version: '2.4'
+
+services:
+
+  db-server:
+    container_name: db-server-container
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "Password123!"
+      ACCEPT_EULA: "Y"
+    ports:
+      - 1433:1433
+    volumes:
+      - db-data:/var/opt/mssql
+    networks:
+      - app-network
+    # mem_limit: 1000mb
+
+  traveljournal:
+    image: ${DOCKER_REGISTRY-}traveljournal
+    build:
+      context: .
+      dockerfile: TravelJournal/Dockerfile
+    environment: # need these for add-migration and update-database
+      - DB_HOST=db-server
+      - DB_NAME=TravelJournal
+      - DB_SA_PASSWORD=Password123!
+    depends_on:
+      - db-server
+    networks:
+      - app-network
+    ports:
+      - 8001:8080
+    # mem_limit: 1000mb
+
+volumes:
+  db-data:
+
+networks:
+  app-network:
+    driver: bridge  
