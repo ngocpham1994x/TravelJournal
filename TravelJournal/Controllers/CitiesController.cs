@@ -120,21 +120,17 @@ namespace TravelJournal.Controllers
             {
                 try
                 {
-                    //// fetch lat/lon from API response
-                    //City geometry = await _geoService.GetCityGeoAsync(city.CityName, city.CountryName);
-                    //if (geometry != null)
-                    //{
-                    //    // Set the latitude and longitude values from the API response
-                    //    city.Lat = geometry.Lat;
-                    //    city.Lon = geometry.Lon;
-                    //}
+                    // fetch lat/lon from API response
+                    City geometry = await _geoService.GetCityGeoAsync(city.CityName, city.CountryName);
+                    if (geometry != null)
+                    {
+                        // Set the latitude and longitude values from the API response
+                        city.Lat = geometry.Lat;
+                        city.Lon = geometry.Lon;
+                    }
 
-                    //// Update the city
-                    ////_context.Update(city);
-                    //// Explicitly attach and mark Lat/Lon as modified
-                    //_context.Attach(city);
-                    //_context.Entry(city).Property(c => c.Lat).IsModified = true;
-                    //_context.Entry(city).Property(c => c.Lon).IsModified = true;
+                    // Update the city
+                    _context.Update(city);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
