@@ -15,6 +15,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<GeoService>();
+builder.Services.AddSingleton<WeatherService>();
 
 var app = builder.Build();
 

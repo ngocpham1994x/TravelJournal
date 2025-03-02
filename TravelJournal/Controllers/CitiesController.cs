@@ -16,11 +16,13 @@ namespace TravelJournal.Controllers
 
         private readonly ApplicationDbContext _context;
         private readonly GeoService _geoService;
+        private readonly WeatherService _weatherService;
 
-        public CitiesController(ApplicationDbContext context, GeoService geoService)
+        public CitiesController(ApplicationDbContext context, GeoService geoService, WeatherService weatherService)
         {
             _context = context;
             _geoService = geoService;
+            _weatherService = weatherService;
         }
 
         // GET: Cities
@@ -43,6 +45,12 @@ namespace TravelJournal.Controllers
             {
                 return NotFound();
             }
+
+            // Fetch the temperature using OpenWeather API
+            float temperature = await _weatherService.GetWeatherAsync(city.Lat, city.Lon);
+
+            // Pass temperature to the view
+            ViewData["Temperature"] = float.IsNaN(temperature) ? "Unavailable" : $"{temperature}°C";
 
             return View(city);
         }
@@ -112,7 +120,21 @@ namespace TravelJournal.Controllers
             {
                 try
                 {
-                    _context.Update(city);
+                    //// fetch lat/lon from API response
+                    //City geometry = await _geoService.GetCityGeoAsync(city.CityName, city.CountryName);
+                    //if (geometry != null)
+                    //{
+                    //    // Set the latitude and longitude values from the API response
+                    //    city.Lat = geometry.Lat;
+                    //    city.Lon = geometry.Lon;
+                    //}
+
+                    //// Update the city
+                    ////_context.Update(city);
+                    //// Explicitly attach and mark Lat/Lon as modified
+                    //_context.Attach(city);
+                    //_context.Entry(city).Property(c => c.Lat).IsModified = true;
+                    //_context.Entry(city).Property(c => c.Lon).IsModified = true;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

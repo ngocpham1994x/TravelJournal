@@ -26,6 +26,7 @@ namespace TravelJournal.Controllers
 
                     // Parse the JSON response
                     JObject json = JObject.Parse(jsonResponse);
+                    Console.WriteLine($"json:{json}");
 
                     // Check if the "results" is not empty
                     if (json["results"] != null)

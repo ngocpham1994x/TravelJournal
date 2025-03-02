@@ -22,7 +22,19 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Address)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.City.CityName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.City.CityName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.City.CountryName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.City.CountryName)
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Lat)
         </dt>
         <dd class = "col-sm-10">
@@ -46,14 +58,29 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.TimeVisit)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.City)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.City.CityName)
-        </dd>
     </dl>
 </div>
+
+<div class="container">
+    <div class="row">
+        <!-- Left Section: Google Map -->
+        <div class="col-md-6">
+            <h4>Location Map</h4>
+            <hr />
+            <div id="map" style="height: 400px; width: 100%;"></div>
+        </div>
+
+        <!-- Right Section: Weather Info -->
+        <div class="col-md-6">
+            <h4>Weather Information</h4>
+            <hr />
+            <p><strong>Temperature:</strong> @ViewData["Temperature"]</p>
+            @* <p><strong>Weather:</strong> <span id="weather-description">Loading...</span></p> *@
+        </div>
+    </div>
+</div>
+
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>

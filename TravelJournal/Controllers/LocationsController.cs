@@ -14,11 +14,13 @@ namespace TravelJournal.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly GeoService _geoService;
+        private readonly WeatherService _weatherService;
 
-        public LocationsController(ApplicationDbContext context, GeoService geoService)
+        public LocationsController(ApplicationDbContext context, GeoService geoService, WeatherService weatherService)
         {
             _context = context;
             _geoService = geoService;
+            _weatherService = weatherService;
         }
 
         // GET: Locations
@@ -44,6 +46,13 @@ namespace TravelJournal.Controllers
             {
                 return NotFound();
             }
+
+            // Fetch the temperature using OpenWeather API
+            float temperature = await _weatherService.GetWeatherAsync(location.Lat, location.Lon);
+
+            // Pass temperature to the view
+            ViewData["Temperature"] = float.IsNaN(temperature) ? "Unavailable" : $"{temperature}°C";
+
 
             return View(location);
         }
