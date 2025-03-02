@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using TravelJournal.Models;
 
 namespace TravelJournal.Controllers
@@ -91,5 +92,6 @@ namespace TravelJournal.Controllers
             }
             return null;
         }
+
     }
 }

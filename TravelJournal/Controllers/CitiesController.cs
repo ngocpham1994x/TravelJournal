@@ -120,15 +120,6 @@ namespace TravelJournal.Controllers
             {
                 try
                 {
-                    // fetch lat/lon from API response
-                    City geometry = await _geoService.GetCityGeoAsync(city.CityName, city.CountryName);
-                    if (geometry != null)
-                    {
-                        // Set the latitude and longitude values from the API response
-                        city.Lat = geometry.Lat;
-                        city.Lon = geometry.Lon;
-                    }
-
                     // Update the city
                     _context.Update(city);
                     await _context.SaveChangesAsync();
@@ -187,7 +178,12 @@ namespace TravelJournal.Controllers
         {
             return _context.City.Any(e => e.CityName == cityName && e.CountryName == countryName);
         }
-    
-        
+
+        public async Task<JsonResult> GetGeoJson(string cityName, string countryName)
+        {
+            City geometry = await _geoService.GetCityGeoAsync(cityName, countryName);
+
+            return Json(new {lat = geometry.Lat, lon = geometry.Lon});  // Return as JSON
+        }
     }
 }

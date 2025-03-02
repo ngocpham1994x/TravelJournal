@@ -13,21 +13,24 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div>
-                <label asp-for="CityName" class="control-label"></label>
-                <input asp-for="CityName" class="form-control" readonly /> @*disabled will not get lat/lon updated*@
+                <label asp-for="CityName" class="control-label" ></label>
+                <input asp-for="CityName" class="form-control" id="CityName" readonly /> @*disabled will not get lat/lon updated*@
             </div>
             <div>
                 <label asp-for="CountryName" class="control-label"></label>
-                <input asp-for="CountryName" class="form-control" readonly /> @*disabled will not get lat/lon updated*@
+                <input asp-for="CountryName" class="form-control" id="CountryName" readonly /> @*disabled will not get lat/lon updated*@
+            </div>
+            <div>
+                <input id="GetGeoJson" type="button" value="Get Accurate Coordinates" class="btn btn-link" />
             </div>
             <div class="form-group">
                 <label asp-for="Lat" class="control-label"></label>
-                <input asp-for="Lat" class="form-control" />
+                <input asp-for="Lat" class="form-control" id="Lat" />
                 <span asp-validation-for="Lat" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Lon" class="control-label"></label>
-                <input asp-for="Lon" class="form-control" />
+                <input asp-for="Lon" class="form-control" id="Lon" />
                 <span asp-validation-for="Lon" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -43,4 +46,29 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+         $(document).ready(function () {
+            $("#GetGeoJson").click(function () {
+                var cityName = $("#CityName").val(); // call id
+                var countryName = $("#CountryName").val();
+
+                if (!cityName || !countryName) {
+                    alert("City and Country must be provided.");
+                    return;
+                }
+
+                $.ajax({
+                    url: "/Cities/GetGeoJson",  // method name is not allowed to have word "Async"
+                    type: "GET",
+                    data: { cityName: cityName, countryName: countryName },
+                    success: function (response) {
+                        $("#Lat").val(response.lat);
+                        $("#Lon").val(response.lon);
+
+                    },
+                });
+            });
+        });
+    </script>
 }
