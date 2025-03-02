@@ -19,10 +19,10 @@
                 @Html.DisplayNameFor(model => model.Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CityName)
+                @Html.DisplayNameFor(model => model.City.CityName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CountryName)
+                @Html.DisplayNameFor(model => model.City.CountryName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Lat)
@@ -31,11 +31,12 @@
                 @Html.DisplayNameFor(model => model.Lon)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateVisite)
+                @Html.DisplayNameFor(model => model.DateVisit)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.TimeVisit)
             </th>
+            
             <th></th>
         </tr>
     </thead>
@@ -49,10 +50,10 @@
                 @Html.DisplayFor(modelItem => item.Address)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CityName)
+                @Html.DisplayFor(modelItem => item.City.CityName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CountryName)
+                @Html.DisplayFor(modelItem => item.City.CountryName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Lat)
@@ -61,11 +62,12 @@
                 @Html.DisplayFor(modelItem => item.Lon)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateVisite)
+                @Html.DisplayFor(modelItem => item.DateVisit)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TimeVisit)
             </td>
+            
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

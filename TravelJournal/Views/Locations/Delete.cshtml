@@ -24,18 +24,6 @@
             @Html.DisplayFor(model => model.Address)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CityName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CityName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CountryName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CountryName)
-        </dd>
-        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Lat)
         </dt>
         <dd class = "col-sm-10">
@@ -48,16 +36,22 @@
             @Html.DisplayFor(model => model.Lon)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateVisite)
+            @Html.DisplayNameFor(model => model.DateVisit)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateVisite)
+            @Html.DisplayFor(model => model.DateVisit)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.TimeVisit)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.TimeVisit)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.City.CityName)
         </dd>
     </dl>
     

@@ -22,7 +22,9 @@ namespace TravelJournal.Controllers
         // GET: Locations
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Location.ToListAsync());
+            var applicationDbContext = _context.Location.Include(location => location.City);
+            return View(await applicationDbContext.ToListAsync());
+            //return View(await _context.Location.ToListAsync());
         }
 
         // GET: Locations/Details/5
@@ -34,6 +36,7 @@ namespace TravelJournal.Controllers
             }
 
             var location = await _context.Location
+                .Include(l => l.City)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (location == null)
             {
@@ -54,14 +57,35 @@ namespace TravelJournal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PlaceName,Address,CityName,CountryName,Lat,Lon,DateVisite,TimeVisit")] Location location)
+        public async Task<IActionResult> Create([Bind("Id,PlaceName,Address,CityName,CountryName,Lat,Lon,DateVisit,TimeVisit")] Location location)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(location);
+                // Check if the city already exists
+                var existingCity = await _context.City
+                    .FirstOrDefaultAsync(city => city.CityName == location.CityName && city.CountryName == location.CountryName);
+
+                if (existingCity == null)
+                {
+                    // If city does not exist, create a new city entry
+                    existingCity = new City
+                    {
+                        CityName = location.CityName,
+                        CountryName = location.CountryName,
+                    };
+
+                    _context.City.Add(existingCity);
+                    await _context.SaveChangesAsync();
+                }
+
+                // Associate location with the city
+                location.City = existingCity;
+                _context.Location.Add(location);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
+            
             return View(location);
         }
 
@@ -86,7 +110,7 @@ namespace TravelJournal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,PlaceName,Address,CityName,CountryName,Lat,Lon,DateVisite,TimeVisit")] Location location)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,PlaceName,Address,CityName,CountryName,Lat,Lon,DateVisit,TimeVisit")] Location location)
         {
             if (id != location.Id)
             {
@@ -97,6 +121,24 @@ namespace TravelJournal.Controllers
             {
                 try
                 {
+                    // Check if the city already exists
+                    var existingCity = await _context.City
+                        .FirstOrDefaultAsync(city => city.CityName == location.CityName && city.CountryName == location.CountryName);
+
+                    // If the city does not exist, create a new one
+                    if (existingCity == null)
+                    {
+                        var newCity = new City
+                        {
+                            CityName = location.CityName,
+                            CountryName = location.CountryName,
+                        };
+
+                        _context.City.Add(newCity);
+                        await _context.SaveChangesAsync(); // Save new city before updating location
+                    }
+
+                    // Update the location
                     _context.Update(location);
                     await _context.SaveChangesAsync();
                 }
@@ -125,6 +167,7 @@ namespace TravelJournal.Controllers
             }
 
             var location = await _context.Location
+                .Include(l => l.City)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (location == null)
             {
@@ -153,7 +196,5 @@ namespace TravelJournal.Controllers
         {
             return _context.Location.Any(e => e.Id == id);
         }
-
-
     }
 }

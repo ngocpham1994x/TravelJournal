@@ -30,7 +30,13 @@ namespace TravelJournal.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Models.City>()
-                .HasKey(c => new { c.CityName, c.CountryName});
+                .HasKey(city => new { city.CityName, city.CountryName});
+
+            modelBuilder.Entity<Models.Location>()
+                .HasOne(location => location.City)  // Each Location has one associated City
+                .WithMany(city => city.Locations)  // A City can have multiple Locations
+                .HasForeignKey(location => new { location.CityName, location.CountryName })  // Foreign key in Location
+                .HasPrincipalKey(location => new { location.CityName, location.CountryName }); // Composite key in City
 
             base.OnModelCreating(modelBuilder);
         }
