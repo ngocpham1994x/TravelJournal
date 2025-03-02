@@ -13,10 +13,12 @@ namespace TravelJournal.Controllers
     public class LocationsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly GeoService _geoService;
 
-        public LocationsController(ApplicationDbContext context)
+        public LocationsController(ApplicationDbContext context, GeoService geoService)
         {
             _context = context;
+            _geoService = geoService;
         }
 
         // GET: Locations
@@ -62,24 +64,29 @@ namespace TravelJournal.Controllers
             if (ModelState.IsValid)
             {
                 // Check if the city already exists
-                var existingCity = await _context.City
+                var isCityExist = await _context.City
                     .FirstOrDefaultAsync(city => city.CityName == location.CityName && city.CountryName == location.CountryName);
 
-                if (existingCity == null)
+                if (isCityExist == null)
                 {
-                    // If city does not exist, create a new city entry
-                    existingCity = new City
+                    // Fetch latitude and longitude from API
+                    var cityWithGeoData = await _geoService.GetCityCoordinatesAsync(location.CityName, location.CountryName);
+
+                    // If city does not exist, create a new city entry with lat/lon from API
+                    isCityExist = new City
                     {
                         CityName = location.CityName,
                         CountryName = location.CountryName,
+                        Lat = cityWithGeoData.Lat,
+                        Lon = cityWithGeoData.Lon
                     };
 
-                    _context.City.Add(existingCity);
+                    _context.City.Add(isCityExist);
                     await _context.SaveChangesAsync();
                 }
 
                 // Associate location with the city
-                location.City = existingCity;
+                location.City = isCityExist;
                 _context.Location.Add(location);
                 await _context.SaveChangesAsync();
 

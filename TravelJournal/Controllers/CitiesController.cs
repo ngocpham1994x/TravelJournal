@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using TravelJournal.Data;
 using TravelJournal.Models;
 
@@ -12,11 +13,14 @@ namespace TravelJournal.Controllers
 {
     public class CitiesController : Controller
     {
-        private readonly ApplicationDbContext _context;
 
-        public CitiesController(ApplicationDbContext context)
+        private readonly ApplicationDbContext _context;
+        private readonly GeoService _geoService;
+
+        public CitiesController(ApplicationDbContext context, GeoService geoService)
         {
             _context = context;
+            _geoService = geoService;
         }
 
         // GET: Cities
@@ -58,6 +62,15 @@ namespace TravelJournal.Controllers
         {
             if (ModelState.IsValid)
             {
+                City geometry = await _geoService.GetCityCoordinatesAsync(city.CityName, city.CountryName);
+                if (geometry != null)
+                {
+                    // Set the latitude and longitude values from the API response
+                    city.Lat = geometry.Lat;
+                    city.Lon = geometry.Lon;
+                }
+
+                // Add the city to the database
                 _context.Add(city);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -155,5 +168,7 @@ namespace TravelJournal.Controllers
         {
             return _context.City.Any(e => e.CityName == cityName && e.CountryName == countryName);
         }
+    
+        
     }
 }
