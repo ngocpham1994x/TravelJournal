@@ -62,7 +62,8 @@ namespace TravelJournal.Controllers
         {
             if (ModelState.IsValid)
             {
-                City geometry = await _geoService.GetCityCoordinatesAsync(city.CityName, city.CountryName);
+                // fetch lat/lon from API response
+                City geometry = await _geoService.GetCityGeoAsync(city.CityName, city.CountryName);
                 if (geometry != null)
                 {
                     // Set the latitude and longitude values from the API response

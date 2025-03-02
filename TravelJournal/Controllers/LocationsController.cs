@@ -70,7 +70,7 @@ namespace TravelJournal.Controllers
                 if (isCityExist == null)
                 {
                     // Fetch latitude and longitude from API
-                    var cityWithGeoData = await _geoService.GetCityCoordinatesAsync(location.CityName, location.CountryName);
+                    var cityWithGeoData = await _geoService.GetCityGeoAsync(location.CityName, location.CountryName);
 
                     // If city does not exist, create a new city entry with lat/lon from API
                     isCityExist = new City
@@ -87,6 +87,17 @@ namespace TravelJournal.Controllers
 
                 // Associate location with the city
                 location.City = isCityExist;
+
+                // fetch lat/lon from API response
+                Location geometry = await _geoService.GetLocationGeoAsync(location.Address, location.CityName, location.CountryName);
+                if (geometry != null)
+                {
+                    // Set the latitude and longitude values from the API response
+                    location.Lat = geometry.Lat;
+                    location.Lon = geometry.Lon;
+                }
+
+
                 _context.Location.Add(location);
                 await _context.SaveChangesAsync();
 
@@ -129,20 +140,38 @@ namespace TravelJournal.Controllers
                 try
                 {
                     // Check if the city already exists
-                    var existingCity = await _context.City
+                    var isCityExist = await _context.City
                         .FirstOrDefaultAsync(city => city.CityName == location.CityName && city.CountryName == location.CountryName);
 
                     // If the city does not exist, create a new one
-                    if (existingCity == null)
+                    if (isCityExist == null)
                     {
-                        var newCity = new City
+                        // Fetch latitude and longitude from API
+                        var cityWithGeoData = await _geoService.GetCityGeoAsync(location.CityName, location.CountryName);
+
+                        // If city does not exist, create a new city entry with lat/lon from API
+                        isCityExist = new City
                         {
                             CityName = location.CityName,
                             CountryName = location.CountryName,
+                            Lat = cityWithGeoData.Lat,
+                            Lon = cityWithGeoData.Lon
                         };
 
-                        _context.City.Add(newCity);
+                        _context.City.Add(isCityExist);
                         await _context.SaveChangesAsync(); // Save new city before updating location
+                    }
+
+                    // Associate location with the city
+                    location.City = isCityExist;
+
+                    // fetch lat/lon from API response
+                    Location geometry = await _geoService.GetLocationGeoAsync(location.Address, location.CityName, location.CountryName);
+                    if (geometry != null)
+                    {
+                        // Set the latitude and longitude values from the API response
+                        location.Lat = geometry.Lat;
+                        location.Lon = geometry.Lon;
                     }
 
                     // Update the location
