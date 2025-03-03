@@ -75,7 +75,6 @@
             <h4>Weather Information</h4>
             <hr />
             <p><strong>Temperature:</strong> @ViewData["Temperature"]</p>
-            @* <p><strong>Weather:</strong> <span id="weather-description">Loading...</span></p> *@
         </div>
     </div>
 </div>
@@ -85,3 +84,21 @@
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts {
+<script> 
+     function initMap() { 
+         var location = { lat: @Model.Lat, lng: @Model.Lon }; 
+         var map = new google.maps.Map(document.getElementById("map"), { 
+             zoom: 14, 
+             center: location 
+         }); 
+         var marker = new google.maps.Marker({ 
+             position: location, 
+             map: map 
+         }); 
+     } 
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7JaM35ulMiCDEpnnncTAIPMA9o8OXYzQ&callback=initMap"></script>
+}

@@ -12,15 +12,15 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div>
+            <div class ="form-group">
                 <label asp-for="CityName" class="control-label" ></label>
                 <input asp-for="CityName" class="form-control" id="CityName" readonly /> @*disabled will not get lat/lon updated*@
             </div>
-            <div>
+            <div class="form-group">
                 <label asp-for="CountryName" class="control-label"></label>
                 <input asp-for="CountryName" class="form-control" id="CountryName" readonly /> @*disabled will not get lat/lon updated*@
             </div>
-            <div>
+            <div class="form-group">
                 <input id="GetGeoJson" type="button" value="Get Accurate Coordinates" class="btn btn-link" />
             </div>
             <div class="form-group">

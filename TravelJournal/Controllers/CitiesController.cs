@@ -48,6 +48,7 @@ namespace TravelJournal.Controllers
 
             // Fetch the temperature using OpenWeather API
             float temperature = await _weatherService.GetWeatherAsync(city.Lat, city.Lon);
+            ViewData["GoogleMapsApiKey"] = _geoService.GetGoogleMapsApiKey(); // Pass API key to View
 
             // Pass temperature to the view
             ViewData["Temperature"] = float.IsNaN(temperature) ? "Unavailable" : $"{temperature}°C";

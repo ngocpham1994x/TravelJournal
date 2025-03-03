@@ -241,5 +241,13 @@ namespace TravelJournal.Controllers
         {
             return _context.Location.Any(e => e.Id == id);
         }
+
+        public async Task<JsonResult> GetGeoJson(string address, string cityName, string countryName)
+        {
+            Location geometry = await _geoService.GetLocationGeoAsync(address, cityName, countryName);
+
+            return Json(new { lat = geometry.Lat, lon = geometry.Lon });  // Return as JSON
+        }
+
     }
 }

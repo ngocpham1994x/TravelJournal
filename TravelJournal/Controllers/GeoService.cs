@@ -6,19 +6,25 @@ namespace TravelJournal.Controllers
 {
     public class GeoService
     {
-        private string GoogleApiKey = "AIzaSyA7JaM35ulMiCDEpnnncTAIPMA9o8OXYzQ";
         private readonly HttpClient _httpClient;
+        private readonly string _googleApiKey;
 
-        public GeoService()
+        public GeoService(IConfiguration configuration)
         {
             _httpClient = ApiHelper._httpClient; // Use the global HttpClient instance
+            _googleApiKey = configuration["GoogleMapsApiKey"]; // Read API Key from appsettings.json
+        }
+
+        public string GetGoogleMapsApiKey()
+        {
+            return _googleApiKey;
         }
 
         // Google Map API processing
         public async Task<City> GetCityGeoAsync(string cityName, string countryName)
         {
-            string request = $"https://maps.googleapis.com/maps/api/geocode/json?address={cityName.Replace(' ', '+')},{countryName.Replace(' ', '+')}&key={GoogleApiKey}";
-
+            string request = $"https://maps.googleapis.com/maps/api/geocode/json?address={cityName.Replace(' ', '+')},{countryName.Replace(' ', '+')}&key={_googleApiKey}";
+            Console.WriteLine(request);
             using (HttpResponseMessage response = await _httpClient.GetAsync(request))
             {
                 if (response.IsSuccessStatusCode)
@@ -56,7 +62,7 @@ namespace TravelJournal.Controllers
     
         public async Task<Location> GetLocationGeoAsync(string address, string cityName, string countryName)
         {
-            string request = $"https://maps.googleapis.com/maps/api/geocode/json?address={address.Replace(' ','+')},{cityName.Replace(' ', '+')},{countryName.Replace(' ', '+')}&key={GoogleApiKey}";
+            string request = $"https://maps.googleapis.com/maps/api/geocode/json?address={address.Replace(' ','+')},{cityName.Replace(' ', '+')},{countryName.Replace(' ', '+')}&key={_googleApiKey}";
 
             using (HttpResponseMessage response = await _httpClient.GetAsync(request))
             {

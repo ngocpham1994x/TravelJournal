@@ -6,18 +6,24 @@ namespace TravelJournal.Controllers
 {
     public class WeatherService
     {
-        private string OpenweatherApiKey = "9c36f3c87a50dc04716c816304ac6762";
         private readonly HttpClient _httpClient;
+        private readonly string _openweatherApiKey;
 
-        public WeatherService()
+        public WeatherService(IConfiguration configuration)
         {
             _httpClient = ApiHelper._httpClient; // Use the global HttpClient instance
+            _openweatherApiKey = configuration["OpenWeatherApiKey"]; // Read API Key from appsettings.json
+        }
+
+        public string GetOpenWeatherApiKey()
+        {
+            return _openweatherApiKey;
         }
 
         // openweather API processing
         public async Task<float> GetWeatherAsync(float? latitude, float? longitude)
         {
-            string request = $"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&units=metric&appid={OpenweatherApiKey}";
+            string request = $"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&units=metric&appid={_openweatherApiKey}";
 
             using (HttpResponseMessage response = await _httpClient.GetAsync(request))
             {
