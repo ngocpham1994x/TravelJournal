@@ -25,11 +25,34 @@ namespace TravelJournal.Controllers
         }
 
         // GET: Locations
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            var applicationDbContext = _context.Location.Include(location => location.City);
-            return View(await applicationDbContext.ToListAsync());
-            //return View(await _context.Location.ToListAsync());
+            var locations = await _context.Location.Include(location => location.City).ToListAsync();
+
+            // implementing Sort feature on City and Country
+            ViewData["cityOrder"] = string.IsNullOrEmpty(sortOrder) ? "city_desc" : "";
+            ViewData["countryOrder"] = (sortOrder == "country_asc") ? "country_desc" : "country_asc";
+
+            switch (sortOrder)
+            {
+                case "city_desc":
+                    locations = locations.OrderByDescending(l => l.City.CityName).ToList();
+                    break;
+
+                case "country_desc":
+                    locations = locations.OrderByDescending(l => l.City.CountryName).ToList();
+                    break;
+
+                case "country_asc":
+                    locations = locations.OrderBy(l => l.City.CountryName).ToList();
+                    break;
+
+                default:
+                    locations = locations.OrderBy(l => l.City.CityName).ToList();
+                    break;
+            }
+
+            return View(locations);
         }
 
         // GET: Locations/Details/5

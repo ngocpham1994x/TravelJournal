@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using TravelJournal.Data;
@@ -27,9 +28,33 @@ namespace TravelJournal.Controllers
         }
 
         // GET: Cities
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            return View(await _context.City.ToListAsync());
+            var cities = await _context.City.ToListAsync();
+
+            ViewData["cityOrder"] = string.IsNullOrEmpty(sortOrder) ? "city_desc" : "";
+            ViewData["countryOrder"] = (sortOrder == "country_asc") ? "country_desc" : "country_asc";
+
+            switch (sortOrder)
+            {
+                case "city_desc":
+                    cities = cities.OrderByDescending(c => c.CityName).ToList();
+                    break;
+
+                case "country_desc":
+                    cities = cities.OrderByDescending(c => c.CountryName).ToList();
+                    break;
+
+                case "country_asc":
+                    cities = cities.OrderBy(c => c.CountryName).ToList();
+                    break;
+
+                default:
+                    cities = cities.OrderBy(c => c.CityName).ToList();
+                    break;
+            }
+
+            return View(cities);
         }
 
         // GET: Cities/Details/5
