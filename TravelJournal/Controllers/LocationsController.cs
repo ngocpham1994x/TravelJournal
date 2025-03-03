@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -58,6 +59,7 @@ namespace TravelJournal.Controllers
         }
 
         // GET: Locations/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -68,6 +70,7 @@ namespace TravelJournal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,PlaceName,Address,CityName,CountryName,Lat,Lon,DateVisit,TimeVisit")] Location location)
         {
             if (ModelState.IsValid)
@@ -117,6 +120,7 @@ namespace TravelJournal.Controllers
         }
 
         // GET: Locations/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -137,6 +141,7 @@ namespace TravelJournal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,PlaceName,Address,CityName,CountryName,Lat,Lon,DateVisit,TimeVisit")] Location location)
         {
             if (id != location.Id)
@@ -204,6 +209,7 @@ namespace TravelJournal.Controllers
         }
 
         // GET: Locations/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -225,6 +231,7 @@ namespace TravelJournal.Controllers
         // POST: Locations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var location = await _context.Location.FindAsync(id);
@@ -242,6 +249,7 @@ namespace TravelJournal.Controllers
             return _context.Location.Any(e => e.Id == id);
         }
 
+        // GET: for cshtml Cities/Edit
         public async Task<JsonResult> GetGeoJson(string address, string cityName, string countryName)
         {
             Location geometry = await _geoService.GetLocationGeoAsync(address, cityName, countryName);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -67,6 +68,7 @@ namespace TravelJournal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("CityName,CountryName,Lat,Lon")] City city)
         {
             if (ModelState.IsValid)
@@ -90,6 +92,7 @@ namespace TravelJournal.Controllers
         }
 
         // GET: Cities/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(string cityName, string countryName)
         {
             if (cityName == null || countryName == null)
@@ -110,6 +113,7 @@ namespace TravelJournal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(string cityName, string countryName, [Bind("CityName,CountryName,Lat,Lon")] City city)
         {
             if (cityName != city.CityName || countryName != city.CountryName)
@@ -142,6 +146,7 @@ namespace TravelJournal.Controllers
         }
 
         // GET: Cities/Delete/51
+        [Authorize]
         public async Task<IActionResult> Delete(string cityName, string countryName)
         {
             if (cityName == null || countryName == null)
@@ -162,6 +167,7 @@ namespace TravelJournal.Controllers
         // POST: Cities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(string cityName, string countryName)
         {
             var city = await _context.City.FindAsync(cityName, countryName);
@@ -180,6 +186,7 @@ namespace TravelJournal.Controllers
             return _context.City.Any(e => e.CityName == cityName && e.CountryName == countryName);
         }
 
+        // GET: for cshtml Cities/Edit
         public async Task<JsonResult> GetGeoJson(string cityName, string countryName)
         {
             City geometry = await _geoService.GetCityGeoAsync(cityName, countryName);
