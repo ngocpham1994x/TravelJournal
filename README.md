@@ -49,6 +49,7 @@ The application supports basic **CRUD (Create, Read, Update, Delete)** operation
   - **City**
   - **Country**
 - These fields cannot be left empty, and an error message is displayed if any of them are missing. If the city is not already listed in the **Cities** table (case-insensitive check), the application automatically creates a new city entry. If the city exists, no new entry is created.
+- Other fields such as **Place Name**, **Date of Visit**, **Time of Visit**, **Lat**, **Lon** are optional and can be left blank.
 - In the **Locations** table, duplicate entries with the same **address**, **city**, and **country** cannot be created. Similarly, in the **Cities** table, duplicate entries with the same **city** and **country** are not allowed. If a user attempts to create such entries, an error message will be displayed in red on the page.
 
 
