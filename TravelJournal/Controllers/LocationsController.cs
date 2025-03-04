@@ -98,6 +98,14 @@ namespace TravelJournal.Controllers
         {
             if (ModelState.IsValid)
             {
+                bool isDuplicate = _context.Location.Any(l => l.Address == location.Address && l.CityName == location.CityName && l.CountryName == location.CountryName);
+
+                if (isDuplicate)
+                {
+                    ModelState.AddModelError("", "A location with this address, city, country already exists.");
+                    return View(location);
+                }
+
                 // Check if the city already exists
                 var isCityExist = await _context.City
                     .FirstOrDefaultAsync(city => city.CityName == location.CityName && city.CountryName == location.CountryName);

@@ -98,6 +98,14 @@ namespace TravelJournal.Controllers
         {
             if (ModelState.IsValid)
             {
+                bool isDuplicate = _context.City.Any(c => c.CityName == city.CityName && c.CountryName == city.CountryName);
+
+                if (isDuplicate)
+                {
+                    ModelState.AddModelError("", "A city with this name already exists in the selected country.");
+                    return View(city);
+                }
+
                 // fetch lat/lon from API response
                 City geometry = await _geoService.GetCityGeoAsync(city.CityName, city.CountryName);
                 if (geometry != null)
