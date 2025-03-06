@@ -40,13 +40,13 @@ The app consists of two primary tables (models): **Locations** and **Cities**, w
 
 ### CRUD Operations
 
-The application supports basic **CRUD (Create, Read, Update, Delete)** operations, with corresponding views created using *cshtml* files for each operation: **Index**, **Create**, **Edit**, **Details**, and **Delete**. Here�s how the operations function:
+The application supports basic **CRUD (Create, Read, Update, Delete)** operations, with corresponding views created using *cshtml* files for each operation: **Index**, **Create**, **Edit**, **Details**, and **Delete**. Here is how the operations function:
 
 #### Read
-- The user accesses the **Location** page, which directs them to the main **Index** page displaying all logged locations, including each entry�s details.
+- The user accesses the **Location** page, which directs them to the main **Index** page displaying all logged locations, including each entry's details.
 
 #### Create
-- To add a new entry, the user clicks on the �**Create Entry**� link. A new page opens, prompting the user to fill in three essential fields for a location:
+- To add a new entry, the user clicks on the **Create Entry** link. A new page opens, prompting the user to fill in three essential fields for a location:
   - **Address**
   - **City**
   - **Country**
@@ -57,10 +57,10 @@ The application supports basic **CRUD (Create, Read, Update, Delete)** operation
 
 #### Update
 - Users can edit any field of an existing **Location** entry. However, the **Address**, **City**, and **Country** fields cannot be set to null. If any mistakes are made during creation, these fields can be updated.
-- A �**Get Accurate Coordinates**� button fetches the latitude and longitude values based on the **Address**, **City**, and **Country** via the **Google Maps API**. This allows the user to save the correct geographical coordinates for the location.
+- A **Get Accurate Coordinates** button fetches the latitude and longitude values based on the **Address**, **City**, and **Country** via the **Google Maps API**. This allows the user to save the correct geographical coordinates for the location.
 
 #### Delete
-- Users can delete entries by clicking the �**Delete**� button on the **Delete** page. Deleting a **City** entry will also delete all associated **Location** entries. A confirmation prompt is displayed before deletion occurs.
+- Users can delete entries by clicking the **Delete** button on the **Delete** page. Deleting a **City** entry will also delete all associated **Location** entries. A confirmation prompt is displayed before deletion occurs.
 
 #### Details
 - The **Details** page provides a convenient view of the entry, displaying all the property values in a vertical layout. If latitude and longitude values exist, an embedded map is displayed using the **Google Maps API**.
