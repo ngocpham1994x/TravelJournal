@@ -32,6 +32,7 @@ namespace TravelJournal.Controllers
             // implementing Sort feature on City and Country
             ViewData["cityOrder"] = string.IsNullOrEmpty(sortOrder) ? "city_desc" : "";
             ViewData["countryOrder"] = (sortOrder == "country_asc") ? "country_desc" : "country_asc";
+            ViewData["dateOrder"] = (sortOrder == "date_asc") ? "date_desc" : "date_asc";
 
             switch (sortOrder)
             {
@@ -45,6 +46,14 @@ namespace TravelJournal.Controllers
 
                 case "country_asc":
                     locations = locations.OrderBy(l => l.City.CountryName).ToList();
+                    break;
+
+                case "date_desc":
+                    locations = locations.OrderByDescending(l => l.DateVisit).ToList();
+                    break;
+
+                case "date_asc":
+                    locations = locations.OrderBy(l => l.DateVisit).ToList();
                     break;
 
                 default:

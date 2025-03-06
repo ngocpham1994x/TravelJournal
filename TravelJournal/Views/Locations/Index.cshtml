@@ -31,7 +31,7 @@
                 @Html.DisplayNameFor(model => model.Lon)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateVisit)
+                <a asp-action="Index" asp-route-sortOrder=@ViewData["dateOrder"] class="text-dark">@Html.DisplayNameFor(model => model.DateVisit)</a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.TimeVisit)
