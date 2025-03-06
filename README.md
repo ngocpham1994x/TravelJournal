@@ -1,5 +1,5 @@
 # Travel Journal Web Application
-#### Video Demo:  [CS50 Final Project | Travel Journal | 2025] (https://youtu.be/4SAEuvIHw4A)
+#### Video Demo:  [CS50 Final Project | Travel Journal | 2025](https://youtu.be/4SAEuvIHw4A)
 #### Description:
 
 ## Overview
