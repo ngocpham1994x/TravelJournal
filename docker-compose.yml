@@ -22,10 +22,6 @@ services:
     build:
       context: .
       dockerfile: TravelJournal/Dockerfile
-    environment: # need these for add-migration and update-database
-      - DB_HOST=db-server
-      - DB_NAME=TravelJournal
-      - DB_SA_PASSWORD=Password123!
     depends_on:
       - db-server
     networks:
