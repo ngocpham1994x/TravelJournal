@@ -5,9 +5,6 @@ services:
   db-server:
     container_name: db-server-container
     image: mcr.microsoft.com/mssql/server:2022-latest
-    environment:
-      SA_PASSWORD: "Password123!"
-      ACCEPT_EULA: "Y"
     ports:
       - 1433:1433
     volumes:
